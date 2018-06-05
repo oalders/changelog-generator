@@ -6,23 +6,21 @@ use feature qw( say state );
 
 use Git::Helpers qw( remote_url );
 use Pithub ();
-use URI ();
+use URI    ();
 
-my ( $token, $user, $repo ) = @ARGV;
+my ( $gh, $token ) = @ARGV;
 
-die "$0 token user repo" unless @ARGV == 1 || @ARGV == 3;
+die "$0 user|org/repo [token]" if @ARGV > 2;
 
-if (!$user) {
-    ($user, $repo ) = URI->new( remote_url() )->path_segments;
-    $repo =~ s{\.git\z}{};
-}
+my ( $user, $repo ) = URI->new( $gh || remote_url() )->path_segments;
+$repo =~ s{\.git\z}{};
 
 my $p = Pithub->new(
     {
         search_api => 'v3',
-        token      => $token,
-        user       => $user,
-        repo       => $repo,
+        $token ? ( token => $token ) : (),
+        user => $user,
+        repo => $repo,
     }
 );
 
