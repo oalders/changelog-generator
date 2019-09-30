@@ -1,4 +1,5 @@
 [
   { "name": "Bug", "color": "ff0000", "description": "Bug" },
+  { "name": "Enhancement", "color": "a2eeef", "description": "Bug" },
   { "name": "Hacktoberfest", "color": "f2791d", "description": "Good first issue" }
 ]
