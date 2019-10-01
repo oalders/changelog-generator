@@ -1,15 +1,12 @@
-name: Maybe create labels
 # This workflow is triggered on pushes to the repository.
 on: [push]
-
+name: Create Default Labels
 jobs:
-  build:
-    # Job name is Greeting
-    name: Manage labels
-    # This job runs on Linux
+  labels:
+    name: DefaultLabelsActions
     runs-on: ubuntu-latest
     steps:
-      - name: "Check & Modify Labels"
-        uses: lannonbr/issue-label-manager-action@2.0.0
+      - uses: actions/checkout@1.0.0
+      - uses: lannonbr/issue-label-manager-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
