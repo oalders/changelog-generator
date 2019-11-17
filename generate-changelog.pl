@@ -8,6 +8,8 @@ use Git::Helpers qw( remote_url );
 use Pithub ();
 use URI    ();
 
+binmode(STDOUT, ":utf8");
+
 my ( $gh, $token ) = @ARGV;
 
 die "$0 user|org/repo [token]" if @ARGV > 2;
