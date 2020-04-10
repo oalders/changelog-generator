@@ -8,6 +8,7 @@ use Git::Helpers qw( remote_url );
 use Pithub ();
 use URI    ();
 
+## no critic: InputOutput::RequireEncodingWithUTF8Layer
 binmode(STDOUT, ":utf8");
 
 my ( $gh, $token ) = @ARGV;
