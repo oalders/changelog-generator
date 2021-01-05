@@ -4,12 +4,23 @@ use strict;
 use warnings;
 use feature qw( say state );
 
+use Getopt::Long::Descriptive qw( describe_options );
 use Git::Helpers qw( remote_url );
 use Pithub ();
 use URI    ();
 
+my ( $opt, $usage ) = describe_options(
+    'generate-changelog.pl %o <some-arg>',
+    [ 'state|s=s', "pull request state", { default => 'closed' } ],
+    [],
+    [ 'verbose|v', "print extra stuff" ],
+    [ 'help', "print usage message and exit", { shortcircuit => 1 } ],
+);
+
+print( $usage->text ), exit if $opt->help;
+
 ## no critic: InputOutput::RequireEncodingWithUTF8Layer
-binmode(STDOUT, ":utf8");
+binmode( STDOUT, ":utf8" );
 
 my ( $gh, $token ) = @ARGV;
 
@@ -31,7 +42,7 @@ my $iter = $p->pull_requests->list(
     params => {
         direction => 'desc',
         sort      => 'updated',
-        state     => 'closed',
+        state     => $opt->state,
     }
 );
 
