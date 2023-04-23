@@ -5,9 +5,9 @@ use warnings;
 use feature qw( say state );
 
 use Getopt::Long::Descriptive qw( describe_options );
-use Git::Helpers qw( remote_url );
-use Pithub ();
-use URI    ();
+use Git::Helpers              qw( remote_url );
+use Pithub                    ();
+use URI                       ();
 
 my ( $opt, $usage ) = describe_options(
     'generate-changelog.pl %o <some-arg>',
@@ -26,7 +26,7 @@ my ( $gh, $token ) = @ARGV;
 
 die "$0 user|org/repo [token]" if @ARGV > 2;
 
-my ( $user, $repo ) = URI->new( $gh || remote_url() )->path_segments;
+my ( $user, $repo ) = $gh ? URI->new( $gh )->path_segments : parse_url();
 $repo =~ s{\.git\z}{};
 
 my $p = Pithub->new(
@@ -59,4 +59,10 @@ while ( my $pull_request = $iter->next ) {
 
     ++$count;
     last if $count >= 25;
+}
+
+sub parse_url {
+    my @segments = URI->new(remote_url())->path_segments;
+    shift @segments unless $segments[0];
+    return @segments;
 }
